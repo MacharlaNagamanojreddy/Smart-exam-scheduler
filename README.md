@@ -1,4 +1,5 @@
 # 🎓 Smart Exam Scheduler
+<img width="2560" height="1440" alt="downloaded-image" src="https://github.com/user-attachments/assets/750023dd-9ef0-492d-afdf-788d19c42a99" />
 
 
 A full-stack university exam scheduling platform that generates conflict-free exam timetables using intelligent algorithms (CSP + Hybrid GA).  
