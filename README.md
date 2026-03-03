@@ -1,7 +1,11 @@
 # 🎓 Smart Exam Scheduler
+
 <img width="2560" height="1440" alt="Smart Exam Scheduler" src="https://github.com/user-attachments/assets/750023dd-9ef0-492d-afdf-788d19c42a99" />
 
-A full-stack university exam scheduling platform that generates conflict-free exam timetables using CSP + Hybrid GA.
+### Latest Dashboard UI
+<img width="1710" height="864" alt="Smart Exam Scheduler Dashboard" src="docs/images/dashboard-blue-outline.png" />
+
+A full-stack platform for generating conflict-free university exam timetables using **CSP** and **Hybrid GA** optimization.
 
 <p align="center">
   <img src="https://img.shields.io/badge/Frontend-React-blue?style=flat-square" />
@@ -10,52 +14,108 @@ A full-stack university exam scheduling platform that generates conflict-free ex
   <img src="https://img.shields.io/badge/API-Express.js-black?style=flat-square" />
   <img src="https://img.shields.io/badge/Database-MongoDB-brightgreen?style=flat-square" />
   <img src="https://img.shields.io/badge/Scheduler-Python-yellow?style=flat-square" />
-  <img src="https://img.shields.io/badge/Algorithms-CSP%20|%20Hybrid%20GA-orange?style=flat-square" />
+  <img src="https://img.shields.io/badge/Algorithms-CSP%20%7C%20Hybrid%20GA-orange?style=flat-square" />
   <img src="https://img.shields.io/badge/Deployment-Docker-blue?style=flat-square" />
 </p>
 
 ---
 
-## 🚀 Features
+## Why This Project
+
+Manual exam timetable creation becomes hard when data grows:
+- student subject overlap causes clashes
+- hall capacity constraints are easy to miss
+- balancing days and slots is time-consuming
+
+Smart Exam Scheduler automates this with a backend-integrated Python scheduler and a live admin UI.
+
+---
+
+## Core Features
 
 - JWT-based admin authentication
-- Student/subject/teacher/hall management
-- Scheduling engine modes:
-  - `csp` (fast baseline)
-  - `hybrid-ga` (GA-optimized ordering + CSP placement)
-- Live dashboard/pages with auto-sync polling
-- Blue-outline UI theme with hover/focus effects
-- CSV export for generated schedules
+- CRUD APIs for Students, Subjects, Halls, Teachers
+- Schedule generation from backend using Python engine
+- Two scheduling modes:
+  - `csp`: fast baseline conflict-free scheduling
+  - `hybrid-ga`: genetic ordering + CSP placement
+- Live dashboard and tables with auto-sync polling
+- Blue-outline UI with hover/focus effects
 
 ---
 
-## 🧠 Tech Stack
+## Tech Stack
 
-- Frontend: React, React Router, Tailwind CSS, Axios
-- Backend: Node.js, Express.js, MongoDB (Mongoose), JWT
-- Scheduler: Python (CSP + Hybrid GA)
+- Frontend: React, React Router, Axios, Tailwind CSS, Vite
+- Backend: Node.js, Express, Mongoose, JWT
+- Database: MongoDB
+- Scheduling Engine: Python 3 (`algorithm/scheduler.py`)
+- Orchestration: Shell script (`run.sh`) + optional Docker
 
 ---
 
-## ⚡ Local Development
+## Architecture
 
-### One-command startup (recommended)
+```mermaid
+flowchart LR
+UI[React Admin UI] -->|HTTP /api| API[Express Backend]
+API --> DB[(MongoDB)]
+API -->|spawn python| PY[algorithm/scheduler.py]
+PY -->|timetable json| API
+API --> UI
+```
+
+---
+
+## Repository Structure
+
+```text
+smart-exam-scheduler/
+├── backend/               # Express API + models + routes
+├── frontend/              # React admin UI
+├── algorithm/             # Python scheduler logic (CSP / Hybrid GA)
+├── docs/                  # Deployment and sync docs
+├── scripts/               # Utility scripts
+└── run.sh                 # One-command local startup
+```
+
+---
+
+## Quick Start (Recommended)
+
+### 1. Prerequisites
+
+- Node.js 18+
+- npm
+- Python 3
+- MongoDB running locally (`localhost:27017`) or accessible URI
+
+### 2. Start everything
 
 ```bash
 chmod +x run.sh
 ./run.sh
 ```
 
-`run.sh` will:
-- install missing dependencies
-- create `backend/config.env` and `frontend/.env` if missing
-- auto-pick free ports:
+`run.sh` behavior:
+- installs dependencies if missing
+- creates missing env files from examples
+- auto-selects free ports
   - backend: `5000-5010`
   - frontend: `3000-3010`
-- print exact frontend/backend URLs
-- work on macOS Bash 3.2 (`wait -n` not required)
+- injects frontend API URL to match selected backend port
+- works on macOS Bash 3.2 (no `wait -n` dependency)
 
-### Manual backend setup
+When it starts, it prints:
+- frontend URL
+- backend URL
+- API URL
+
+---
+
+## Manual Setup (If You Prefer Separate Terminals)
+
+### Backend
 
 ```bash
 cp backend/config.env.example backend/config.env
@@ -63,7 +123,7 @@ npm --prefix backend install
 npm --prefix backend run start
 ```
 
-### Manual frontend setup
+### Frontend
 
 ```bash
 cp frontend/.env.example frontend/.env
@@ -71,66 +131,221 @@ npm --prefix frontend install
 npm --prefix frontend run dev
 ```
 
----
-
-## 🔐 First Login
-
-- Open the frontend URL shown by `run.sh` (or `http://localhost:3000` if free)
-- Click `Login` in the top-right
-- If no admin exists yet:
-  - check setup status: `GET /api/auth/bootstrap`
-  - create first admin: `POST /api/auth/register`
+Important:
+- set `VITE_API_URL` in `frontend/.env` to your running backend API base, e.g.:
+  - `VITE_API_URL=http://localhost:5000/api`
+  - or `http://localhost:5001/api` if 5000 is occupied
 
 ---
 
-## 🗂 Folder Structure
+## Environment Variables
 
-```text
-smart-exam-scheduler/
-├── backend/         # Express API
-├── frontend/        # React admin UI
-├── algorithm/       # Python scheduler logic (CSP/GA)
-├── docs/            # Deployment and docs
-├── scripts/         # Utility scripts
-└── run.sh           # Local one-command runner
+### Backend (`backend/config.env`)
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `PORT` | No | `5000` | Backend server port |
+| `MONGO_URI` | Yes | `mongodb://localhost:27017/exam_scheduler` | Mongo connection string |
+| `NODE_ENV` | No | `development` | Node environment |
+| `PYTHON_PATH` | No | `python3` | Python executable for scheduler |
+| `JWT_SECRET` | Yes | `dev-jwt-secret-change-me` fallback | JWT signing secret |
+| `JWT_EXPIRES_IN` | No | `7d` | Token expiry |
+
+### Frontend (`frontend/.env`)
+
+| Variable | Required | Example | Description |
+|---|---|---|---|
+| `VITE_API_URL` | Yes | `http://localhost:5000/api` | API base URL |
+
+---
+
+## Authentication Flow
+
+All domain routes are protected with JWT middleware:
+- `/api/students/*`
+- `/api/subjects/*`
+- `/api/halls/*`
+- `/api/teachers/*`
+- `/api/schedule/*`
+
+Auth routes:
+- `GET /api/auth/bootstrap` -> check if first admin setup is needed
+- `POST /api/auth/register` -> create first admin (only once)
+- `POST /api/auth/login` -> login and receive token
+- `GET /api/auth/me` -> current user from token
+
+### First login steps
+
+1. Open frontend URL.
+2. If no admin exists, call register endpoint once.
+3. Login from top-right `Login` button.
+4. Token is stored in browser `localStorage` and sent in `Authorization: Bearer <token>`.
+
+### Example cURL
+
+```bash
+# Check if admin setup is needed
+curl http://localhost:5000/api/auth/bootstrap
+
+# Register first admin (only once)
+curl -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Admin","email":"admin@example.com","password":"Admin@123"}'
+
+# Login
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@example.com","password":"Admin@123"}'
 ```
 
 ---
 
-## 📅 Scheduling Pipeline
+## Scheduling Engine
 
-```mermaid
-flowchart LR
-A[React Admin UI] -->|REST API| B[Node.js + Express Backend]
-B -->|Queries| C[(MongoDB)]
-B -->|Invoke| D[Python Scheduler Engine]
-D -->|Timetable| B
-B -->|Response| A
+Schedule generation endpoint:
+- `POST /api/schedule/generate`
+
+Request body supports:
+
+```json
+{
+  "startDate": "2026-05-20",
+  "excludeDates": ["2026-05-25"],
+  "algorithmMode": "csp",
+  "gaPopulation": 30,
+  "gaGenerations": 25,
+  "gaMutationRate": 0.12
+}
 ```
 
+### Parameters
+
+- `algorithmMode`
+  - `csp`: quicker baseline scheduling
+  - `hybrid-ga`: better global arrangement at higher compute cost
+- `gaPopulation`: population size for GA (used in hybrid mode)
+- `gaGenerations`: number of evolution cycles
+- `gaMutationRate`: mutation probability (0-1)
+
+### Recommended usage
+
+- Start with `csp` while entering data rapidly.
+- Use `hybrid-ga` when finalizing a production timetable.
+
 ---
 
-## 🛠 Troubleshooting
+## API Reference (Quick)
 
-- `EADDRINUSE` port error:
-  - run `./run.sh` (auto-selects free ports), or
-  - stop process manually, e.g. `lsof -ti :5000 | xargs kill -9`
-- Login shows invalid credentials:
-  - clear browser storage (`localStorage`) and retry
-  - verify frontend API URL points to the running backend
+### Health
+
+- `GET /health`
+
+### Students
+
+- `GET /api/students`
+- `GET /api/students/:id`
+- `POST /api/students/add`
+- `POST /api/students/bulk`
+- `PUT /api/students/:id`
+- `DELETE /api/students/:id`
+
+### Subjects
+
+- `GET /api/subjects`
+- `GET /api/subjects/:code`
+- `POST /api/subjects/add`
+- `POST /api/subjects/bulk`
+- `PUT /api/subjects/:code`
+- `DELETE /api/subjects/:code`
+
+### Halls
+
+- `GET /api/halls`
+- `GET /api/halls/:id`
+- `POST /api/halls/add`
+- `POST /api/halls/bulk`
+- `PUT /api/halls/:id`
+- `DELETE /api/halls/:id`
+
+### Teachers
+
+- `GET /api/teachers`
+- `GET /api/teachers/:id`
+- `POST /api/teachers/add`
+- `POST /api/teachers/bulk`
+- `PUT /api/teachers/:id`
+- `DELETE /api/teachers/:id`
+
+### Schedule
+
+- `POST /api/schedule/generate`
+- `GET /api/schedule/all`
+- `GET /api/schedule/date/:date`
+- `GET /api/schedule/department/:dept`
+- `GET /api/schedule/semester/:sem`
+- `DELETE /api/schedule/clear`
+- `GET /api/schedule/stats`
 
 ---
 
-## 📦 Deployment
+## Data Model Summary
 
-See deployment notes in:
+- `Student`: `studentId`, `name`, `email`, `department`, `semester`, `subjects[]`
+- `Subject`: `code`, `name`, `department`, `semester`, `preferredSlot`, `duration`
+- `Hall`: `hallId`, `name`, `capacity`, `building`, `isAvailable`
+- `Teacher`: `teacherId`, `name`, `email`, `department`, `isAvailable`
+- `Schedule`: generated exam entries with subject, date, slot, hall, semester, department
 
-```text
-docs/DEPLOYMENT.md
+---
+
+## UI Notes
+
+- Dashboard cards and tables sync automatically on interval polling.
+- Timetable page refreshes live student counts based on current student-subject mapping.
+- Login modal includes focus outline behavior for keyboard-friendly input flow.
+
+---
+
+## Troubleshooting
+
+### `EADDRINUSE: address already in use`
+
+- Cause: port already occupied by previous process.
+- Fix:
+  - use `./run.sh` (auto-port fallback), or
+  - stop existing process manually:
+
+```bash
+lsof -ti :5000 | xargs kill -9
+lsof -ti :3000 | xargs kill -9
 ```
 
+### Login shows `Invalid email or password`
+
+- ensure backend is running and reachable at configured `VITE_API_URL`
+- clear browser local storage and retry
+- if needed, reset admin password in DB
+
+### Students not reflected in timetable counts
+
+- ensure student `subjects[]` values match subject **code** or **name**
+- regenerate schedule after major data changes
+
+### Mongo not connected
+
+- start local MongoDB or update `MONGO_URI` to remote cluster
+
 ---
 
-## 👨‍💻 Author
+## Deployment and Sync Docs
+
+- Deployment guide: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md)
+- GitHub + LinkedIn update workflow: [`docs/GITHUB_LINKEDIN_SYNC.md`](docs/GITHUB_LINKEDIN_SYNC.md)
+
+---
+
+## Author
 
 **Macharla Naga Manoj Reddy**
+
+If this project helped you, consider starring the repository.
