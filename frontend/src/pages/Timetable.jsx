@@ -38,7 +38,7 @@ export default function Timetable() {
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-md border overflow-hidden">
+      <div className="table-surface">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-left">
             <tr>
@@ -67,7 +67,7 @@ export default function Timetable() {
             {timetable.map((exam) => (
               <tr
                 key={`${exam.subjectCode}-${exam.date}-${exam.slot}-${exam.hall}`}
-                className="border-t"
+                className="border-t table-row-hover"
               >
                 <td className="px-4 py-2">{exam.date}</td>
                 <td className="px-4 py-2">{exam.slot}</td>

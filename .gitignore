@@ -20,6 +20,7 @@ backend/config.env
 .DS_Store
 .idea/
 .vscode/
+*.swp
 
 # Python
 __pycache__/

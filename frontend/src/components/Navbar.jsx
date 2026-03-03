@@ -39,14 +39,14 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="flex items-center justify-between p-4 bg-white shadow-sm border-b gap-4">
+      <div className="flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-md border-b border-blue-100 gap-4">
         <h1 className="text-xl font-semibold">Smart Exam Scheduler</h1>
         <div className="flex items-center gap-3">
           <span
-            className={`text-xs px-3 py-1 rounded-full ${
+            className={`text-xs px-3 py-1 rounded-full border ${
               hasToken
-                ? "bg-emerald-100 text-emerald-700"
-                : "bg-amber-100 text-amber-700"
+                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                : "bg-amber-50 text-amber-700 border-amber-200"
             }`}
           >
             {hasToken ? "Live Sync On" : "Login Needed"}
@@ -55,7 +55,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={logout}
-              className="px-4 py-2 rounded-lg bg-gray-900 text-white text-sm"
+              className="px-4 py-2 btn-neutral text-sm"
             >
               Logout
             </button>
@@ -63,7 +63,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm"
+              className="px-4 py-2 btn-blue text-sm"
             >
               Login
             </button>
@@ -72,10 +72,10 @@ export default function Navbar() {
       </div>
 
       <Modal open={open}>
-        <form onSubmit={login} className="w-[360px]">
+        <form onSubmit={login} className="w-[360px] outline-panel p-6">
           <h2 className="text-xl font-semibold mb-4">Admin Login</h2>
           <input
-            className="border p-3 rounded w-full mb-3"
+            className="input-blue mb-3"
             name="email"
             type="email"
             placeholder="Email"
@@ -84,7 +84,7 @@ export default function Navbar() {
             required
           />
           <input
-            className="border p-3 rounded w-full mb-3"
+            className="input-blue mb-3"
             name="password"
             type="password"
             placeholder="Password"
@@ -96,14 +96,14 @@ export default function Navbar() {
           <div className="flex justify-end gap-2">
             <button
               type="button"
-              className="px-4 py-2 rounded-lg border"
+              className="px-4 py-2 btn-neutral"
               onClick={() => setOpen(false)}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white disabled:opacity-60"
+              className="px-4 py-2 btn-blue disabled:opacity-60"
               disabled={loading}
             >
               {loading ? "Signing in..." : "Sign in"}

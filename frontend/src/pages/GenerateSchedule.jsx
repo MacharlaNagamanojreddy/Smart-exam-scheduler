@@ -33,27 +33,29 @@ export default function GenerateSchedule() {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-semibold mb-4">Generate Schedule</h2>
-      <div className="mb-4 max-w-sm">
-        <label className="block text-sm mb-2 text-gray-600">Start Date</label>
-        <input
-          type="date"
-          className="border p-3 rounded w-full"
-          value={startDate}
-          onChange={(event) => setStartDate(event.target.value)}
-        />
-      </div>
+      <div className="outline-panel p-5 max-w-lg">
+        <div className="mb-4 max-w-sm">
+          <label className="block text-sm mb-2 text-gray-600">Start Date</label>
+          <input
+            type="date"
+            className="input-blue"
+            value={startDate}
+            onChange={(event) => setStartDate(event.target.value)}
+          />
+        </div>
 
-      <button
-        onClick={generate}
-        disabled={loading}
-        className="px-6 py-3 bg-green-600 text-white rounded-lg disabled:opacity-60"
-      >
-        {loading ? "Generating..." : "Generate Schedule"}
-      </button>
+        <button
+          onClick={generate}
+          disabled={loading}
+          className="px-6 py-3 btn-blue disabled:opacity-60"
+        >
+          {loading ? "Generating..." : "Generate Schedule"}
+        </button>
+      </div>
 
       {message && <p className="mt-4 text-base font-semibold text-green-600">{message}</p>}
 
-      <div className="mt-6 p-4 bg-white border rounded-xl max-w-md">
+      <div className="mt-6 p-4 outline-panel max-w-md">
         <p className="text-gray-600">Live schedule snapshot</p>
         <p className="mt-2">Total Exams: <strong>{stats.totalExams || 0}</strong></p>
         <p>Total Days: <strong>{stats.totalDays || 0}</strong></p>

@@ -26,6 +26,10 @@ export default function Dashboard() {
 
   return (
     <div className="p-6">
+      <div className="outline-pill px-5 md:px-8 py-8 md:py-10 mb-6 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900">Smart Exam Scheduler</h1>
+      </div>
+
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-semibold">Live Dashboard</h2>
         <p className="text-sm text-gray-500">

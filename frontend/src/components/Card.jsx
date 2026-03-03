@@ -1,8 +1,8 @@
 export default function Card({ title, value }) {
   return (
-    <div className="p-6 bg-white rounded-2xl shadow-md border">
-      <p className="text-gray-600">{title}</p>
-      <h2 className="text-3xl font-bold mt-2">{value}</h2>
+    <div className="outline-panel p-6">
+      <p className="text-slate-600">{title}</p>
+      <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">{value}</h2>
     </div>
   );
 }

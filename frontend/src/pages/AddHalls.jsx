@@ -65,46 +65,48 @@ export default function AddHalls() {
     <div className="p-6">
       <h2 className="text-2xl font-semibold mb-4">Add Halls</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <input
-          className="border p-3 rounded w-full"
-          placeholder="Hall ID"
-          name="hallId"
-          value={form.hallId}
-          onChange={onChange}
-        />
-        <input
-          className="border p-3 rounded w-full"
-          placeholder="Hall Name"
-          name="name"
-          value={form.name}
-          onChange={onChange}
-        />
-        <input
-          className="border p-3 rounded w-full"
-          placeholder="Capacity"
-          name="capacity"
-          type="number"
-          min="1"
-          value={form.capacity}
-          onChange={onChange}
-        />
-        <input
-          className="border p-3 rounded w-full"
-          placeholder="Building"
-          name="building"
-          value={form.building}
-          onChange={onChange}
-        />
-      </div>
+      <div className="outline-panel p-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <input
+            className="input-blue"
+            placeholder="Hall ID"
+            name="hallId"
+            value={form.hallId}
+            onChange={onChange}
+          />
+          <input
+            className="input-blue"
+            placeholder="Hall Name"
+            name="name"
+            value={form.name}
+            onChange={onChange}
+          />
+          <input
+            className="input-blue"
+            placeholder="Capacity"
+            name="capacity"
+            type="number"
+            min="1"
+            value={form.capacity}
+            onChange={onChange}
+          />
+          <input
+            className="input-blue"
+            placeholder="Building"
+            name="building"
+            value={form.building}
+            onChange={onChange}
+          />
+        </div>
 
-      <button
-        className="px-6 py-3 bg-blue-600 text-white rounded-lg disabled:opacity-60"
-        onClick={addHall}
-        disabled={saving}
-      >
-        {saving ? "Adding..." : "Add Hall"}
-      </button>
+        <button
+          className="px-6 py-3 btn-blue disabled:opacity-60"
+          onClick={addHall}
+          disabled={saving}
+        >
+          {saving ? "Adding..." : "Add Hall"}
+        </button>
+      </div>
 
       <p className="mt-3 text-sm text-gray-500">
         {lastSyncedAt
@@ -115,7 +117,7 @@ export default function AddHalls() {
         <p className="mt-3 text-sm text-red-600">{message || error}</p>
       )}
 
-      <div className="mt-6 bg-white border rounded-xl overflow-hidden">
+      <div className="mt-6 table-surface">
         <div className="px-4 py-3 border-b bg-gray-50 font-medium">Halls</div>
         <div className="overflow-auto">
           <table className="w-full text-sm">
@@ -130,14 +132,14 @@ export default function AddHalls() {
             </thead>
             <tbody>
               {sortedHalls.map((hall) => (
-                <tr key={hall.hallId} className="border-t">
+                <tr key={hall.hallId} className="border-t table-row-hover">
                   <td className="px-4 py-2">{hall.hallId}</td>
                   <td className="px-4 py-2">{hall.name}</td>
                   <td className="px-4 py-2">{hall.capacity}</td>
                   <td className="px-4 py-2">{hall.building}</td>
                   <td className="px-4 py-2">
                     <button
-                      className="text-red-600"
+                      className="text-red-600 hover:text-red-700 hover:underline"
                       onClick={() => deleteHall(hall.hallId)}
                     >
                       Delete

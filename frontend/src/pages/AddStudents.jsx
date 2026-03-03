@@ -74,61 +74,63 @@ export default function AddStudents() {
     <div className="p-6">
       <h2 className="text-2xl font-semibold mb-4">Add Students</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <input
-          className="border p-3 rounded w-full"
-          placeholder="Student ID (ex: S101)"
-          name="studentId"
-          value={form.studentId}
-          onChange={onChange}
-        />
-        <input
-          className="border p-3 rounded w-full"
-          placeholder="Student Name"
-          name="name"
-          value={form.name}
-          onChange={onChange}
-        />
-        <input
-          className="border p-3 rounded w-full"
-          placeholder="Email"
-          name="email"
-          type="email"
-          value={form.email}
-          onChange={onChange}
-        />
-        <input
-          className="border p-3 rounded w-full"
-          placeholder="Department"
-          name="department"
-          value={form.department}
-          onChange={onChange}
-        />
-        <input
-          className="border p-3 rounded w-full"
-          placeholder="Semester"
-          name="semester"
-          type="number"
-          min="1"
-          value={form.semester}
-          onChange={onChange}
-        />
-        <input
-          className="border p-3 rounded w-full"
-          placeholder="Subjects by code/name (comma separated)"
-          name="subjects"
-          value={form.subjects}
-          onChange={onChange}
-        />
-      </div>
+      <div className="outline-panel p-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <input
+            className="input-blue"
+            placeholder="Student ID (ex: S101)"
+            name="studentId"
+            value={form.studentId}
+            onChange={onChange}
+          />
+          <input
+            className="input-blue"
+            placeholder="Student Name"
+            name="name"
+            value={form.name}
+            onChange={onChange}
+          />
+          <input
+            className="input-blue"
+            placeholder="Email"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={onChange}
+          />
+          <input
+            className="input-blue"
+            placeholder="Department"
+            name="department"
+            value={form.department}
+            onChange={onChange}
+          />
+          <input
+            className="input-blue"
+            placeholder="Semester"
+            name="semester"
+            type="number"
+            min="1"
+            value={form.semester}
+            onChange={onChange}
+          />
+          <input
+            className="input-blue"
+            placeholder="Subjects by code/name (comma separated)"
+            name="subjects"
+            value={form.subjects}
+            onChange={onChange}
+          />
+        </div>
 
-      <button
-        className="px-6 py-3 bg-blue-600 text-white rounded-lg disabled:opacity-60"
-        onClick={addStudent}
-        disabled={saving}
-      >
-        {saving ? "Adding..." : "Add Student"}
-      </button>
+        <button
+          className="px-6 py-3 btn-blue disabled:opacity-60"
+          onClick={addStudent}
+          disabled={saving}
+        >
+          {saving ? "Adding..." : "Add Student"}
+        </button>
+      </div>
 
       <p className="mt-3 text-sm text-gray-500">
         {lastSyncedAt
@@ -143,7 +145,7 @@ export default function AddStudents() {
         <p className="mt-3 text-sm text-red-600">{message || error}</p>
       )}
 
-      <div className="mt-6 bg-white border rounded-xl overflow-hidden">
+      <div className="mt-6 table-surface">
         <div className="px-4 py-3 border-b bg-gray-50 font-medium">Students</div>
         <div className="overflow-auto">
           <table className="w-full text-sm">
@@ -158,14 +160,14 @@ export default function AddStudents() {
             </thead>
             <tbody>
               {sortedStudents.map((student) => (
-                <tr key={student.studentId} className="border-t">
+                <tr key={student.studentId} className="border-t table-row-hover">
                   <td className="px-4 py-2">{student.studentId}</td>
                   <td className="px-4 py-2">{student.name}</td>
                   <td className="px-4 py-2">{student.department}</td>
                   <td className="px-4 py-2">{student.semester}</td>
                   <td className="px-4 py-2">
                     <button
-                      className="text-red-600"
+                      className="text-red-600 hover:text-red-700 hover:underline"
                       onClick={() => deleteStudent(student.studentId)}
                     >
                       Delete
